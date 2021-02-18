@@ -1,0 +1,14 @@
+{
+  "manifest_version": 2,
+  "name": "Geoguessr Discord-RPC",
+  "version": "0.1",
+  "content_scripts": [
+    {
+      "matches": ["https://github.com/polynux/geoguessr-discord-rpc/tree/main"],
+      "js": ["content.js"]
+    }
+  ],
+  "browser_action": {
+    "default_icon": "geoguessr.png"
+  }
+}
