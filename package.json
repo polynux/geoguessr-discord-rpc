@@ -1,0 +1,23 @@
+{
+  "name": "geoguessr-discord-rpc",
+  "version": "1.0.0",
+  "description": "A simple chrome extension to add discord rich presence for geoguessr",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/polynux/geoguessr-discord-rpc.git"
+  },
+  "author": "polynux",
+  "license": "GPL",
+  "bugs": {
+    "url": "https://github.com/polynux/geoguessr-discord-rpc/issues"
+  },
+  "homepage": "https://github.com/polynux/geoguessr-discord-rpc#readme",
+  "dependencies": {
+    "discord-rpc": "^3.2.0",
+    "ws": "^7.4.3"
+  }
+}
