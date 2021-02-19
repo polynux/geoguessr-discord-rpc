@@ -1,10 +1,6 @@
 let ws = new WebSocket("ws://localhost:8080");
 
-ws.onopen = () => {
-  console.log("connected");
-};
-
-ws.onerror = () => {
+function onWsError() {
   let tryConnect = setInterval(() => {
     ws = new WebSocket("ws://localhost:8080");
 
@@ -13,6 +9,18 @@ ws.onerror = () => {
       console.log("connected");
     };
   }, 10000);
+}
+
+ws.onopen = () => {
+  console.log("connected");
+};
+
+ws.onerror = () => {
+  onWsError();
+};
+
+ws.onclose = () => {
+  onWsError();
 };
 
 const str = JSON.stringify;
@@ -22,24 +30,16 @@ function sendWebsocketState(state) {
 }
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request.message === "url") {
+  if (request.message === "play") {
     sendWebsocketState("play");
-  }
-
-  if (request.message === "close") {
+  } else if (request.message === "idle") {
+    sendWebsocketState("idle");
+  } else if (request.message === "leave") {
     sendWebsocketState("leave");
-  }
-});
-
-chrome.tabs.onActivated.addListener(() => {
-  let count = 0;
-  chrome.tabs.query({ active: true, currentWindow: true, url: "https://www.geoguessr.com/*" }, tabs => {
-    sendWebsocketState("play");
-    if (tabs.length !== 0) count = 1;
-  });
-
-  if (count === 0) {
+  } else if (request.message === "close") {
     sendWebsocketState("leave");
+  } else {
+    console.log(request.message);
   }
 });
 
