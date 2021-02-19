@@ -5,8 +5,13 @@ const rpc = new RPC.Client({
   transport: "ipc"
 });
 
-function activity() {
-  rpc.setActivity({ details: "geomerding", largeImageKey: "geoguessr_1024", largeImageText: "Geoguessr" });
+function setActivity(activity) {
+  rpc.setActivity({
+    details: "Geomerding",
+    state: activity.state,
+    largeImageKey: "geoguessr_1024",
+    largeImageText: "Geoguessr"
+  });
 }
 
 const parse = JSON.parse;
@@ -22,10 +27,12 @@ wss.on("connection", ws => {
   ws.on("message", data => {
     data = JSON.parse(data);
     console.log(data.state);
+
     if (data.state === "play") {
-      activity();
-    }
-    if (data.state === "leave") {
+      setActivity({ state: "playing" });
+    } else if (data.state === "idle") {
+      setActivity({ state: "idle" });
+    } else if (data.state === "leave") {
       rpc.clearActivity();
     }
   });
