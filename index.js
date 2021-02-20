@@ -5,13 +5,22 @@ const rpc = new RPC.Client({
   transport: "ipc"
 });
 
-function setActivity(activity) {
-  rpc.setActivity({
-    details: "Geomerding",
-    state: activity.state,
-    largeImageKey: "geoguessr_1024",
-    largeImageText: "Geoguessr"
-  });
+function setActivity(activity, type) {
+  if (type === "streak") {
+    rpc.setActivity({
+      details: "Geomerding",
+      state: activity.game + " - " + activity.score,
+      largeImageKey: "geoguessr_1024",
+      largeImageText: "Geoguessr"
+    });
+  } else {
+    rpc.setActivity({
+      details: "Geomerding",
+      state: activity.game + " - " + activity.number + " - " + activity.score,
+      largeImageKey: "geoguessr_1024",
+      largeImageText: "Geoguessr"
+    });
+  }
 }
 
 const parse = JSON.parse;
@@ -26,15 +35,21 @@ wss.on("connection", ws => {
 
   ws.on("message", data => {
     data = JSON.parse(data);
-    console.log(data.state);
 
-    if (data.state === "play") {
-      setActivity({ state: "playing" });
-    } else if (data.state === "idle") {
-      setActivity({ state: "idle" });
-    } else if (data.state === "leave") {
-      rpc.clearActivity();
+    if (data.game === "country-streak") {
+      data.game = "Country Streak";
+      setActivity(data, "streak");
+    } else {
+      setActivity(data);
     }
+
+    // if (data.state === "play") {
+    //   setActivity({ state: "playing" });
+    // } else if (data.state === "idle") {
+    //   setActivity({ state: "idle" });
+    // } else if (data.state === "leave") {
+    //   rpc.clearActivity();
+    // }
   });
 });
 
