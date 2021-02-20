@@ -1,0 +1,20 @@
+{
+  "manifest_version": 2,
+  "name": "Geoguessr Discord-RPC (No server)",
+  "version": "0.1",
+  "permissions": ["tabs", "activeTab", "storage", "https://*/*"],
+  "content_scripts": [
+    {
+      "run_at": "document_start",
+      "matches": ["https://www.geoguessr.com/*", "https://discord.com/*"],
+      "js": ["getToken.js", "content.js"]
+    }
+  ],
+  "content_security_policy": "script-src 'self'; object-src 'self'",
+  "browser_action": {
+    "default_icon": "geoguessr.png"
+  },
+  "background": {
+    "scripts": ["discord.js", "background.js"]
+  }
+}
