@@ -29,18 +29,27 @@ function sendWebsocketState(state) {
   ws.send(str({ state: state }));
 }
 
+function sendWebsocketActivty(activity) {
+  ws.send(str(activity));
+}
+
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request.message === "play") {
-    sendWebsocketState("play");
-  } else if (request.message === "idle") {
-    sendWebsocketState("idle");
-  } else if (request.message === "leave") {
-    sendWebsocketState("leave");
-  } else if (request.message === "close") {
-    sendWebsocketState("leave");
-  } else {
-    console.log(request.message);
+  if (request.hasOwnProperty("game")) {
+    sendWebsocketActivty(request);
   }
+  //else {
+  //   if (request.message === "play") {
+  //     sendWebsocketState("play");
+  //   } else if (request.message === "idle") {
+  //     sendWebsocketState("idle");
+  //   } else if (request.message === "leave") {
+  //     sendWebsocketState("leave");
+  //   } else if (request.message === "close") {
+  //     sendWebsocketState("leave");
+  //   } else {
+  //     console.log(request.message);
+  //   }
+  // }
 });
 
 chrome.tabs.onRemoved.addListener(() => {
